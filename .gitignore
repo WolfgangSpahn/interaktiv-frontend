@@ -1,0 +1,30 @@
+# Ignore all log files
+*.log
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Environment variables - PASSWORDS, API KEYS, etc
+.env
+
+# ignore vscode settings
+.vscode/
+
+# -------------------------------------------------------- Javascript frontend
+
+# Dependency directories
+node_modules/
+# Output directories
+built/
+
+## -------------------------------------------------------- Python backend
+# virtualenv
+/backend/.venv/
+# build
+/backend/interaktiv_server.egg-info
+# testing
+/backend/.pytest_cache
+# cache, bytecode, etc
+__pycache__/
+*.py[cod]
