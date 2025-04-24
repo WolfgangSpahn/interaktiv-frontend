@@ -4,7 +4,7 @@ ifneq (,$(wildcard ./.env))
 endif
 
 help:           ## Show this help.
-	@fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep | sed -e "s/\\$$//" | sed -e "s/##//"
+	@grep -h "##" $(MAKEFILE_LIST) | grep -v fgrep | sed -e "s/\\$$//" | sed -e "s/##//"
 
 FIND=find
 
@@ -14,8 +14,11 @@ ifeq ($(OS), Windows_NT)
 	FIND=gfind
 endif
 
-REMOTE_PATH=~/
-EXTRACTION_PATH=/usr/share/nginx/html/interaktiv/docs/
+
+AWS_PREFIX=/usr/share/nginx/
+LOC_PREFIX=/usr/share/nginx/
+INTERAKTIV_DOCS=html/interaktiv/docs/
+INTERAKTIV_ATELIER=html/interaktiv/atelier/
 SERVER=aws-server
 BUNDLE=built/index.js
 
@@ -28,8 +31,18 @@ install:        ## installs dependencies
 build:          ## Bundle js code with rollup.
 	@npm run build
 
+build_local:    ## Bundle js code with rollup for local use.
+	@npm run build
+	sed -i "s|const BASE_URL = 'https://sebayt.ch/interaktiv/';  // AWS endpoint|const BASE_URL = 'http://localhost/interaktiv/';  // localhost endpoint|" built/index.js
+
 push:           ## push to github
 	git push origin main
 
-upload:         ## Upload the docs to the server
-	scp -r $(BUNDLE) $(SERVER):$(REMOTE_PATH)
+upload:         ## Upload the bundle to the AWS server
+	scp -r $(BUNDLE) $(SERVER):$(AWS_PREFIX)$(INTERAKTIV_DOCS)
+
+upload_atelier: ## Upload the bundle to the AWS server
+	scp -r $(BUNDLE) $(SERVER):$(AWS_PREFIX)$(INTERAKTIV_ATELIER)
+
+load:           ## load the bundle to local nginx server
+	cp -r $(BUNDLE) $(LOC_PREFIX)$(INTERAKTIV_DOCS)

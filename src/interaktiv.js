@@ -3,7 +3,7 @@ import { createTeam } from "./team.js";
 import { likertField, resultsBoard,showPercentage } from "./draw.js";
 import { addSubmitOnReturn } from "./listeners.js";
 import { createMustererkennung } from "./mustererkennung.js";
-
+import { SuperGif } from "@wizpanda/super-gif";
 
 // run a function on all div elements with type=fun.name
 export function runFunction(fun) {
@@ -119,3 +119,25 @@ export async function pollPercentage(percentageElement){
     showPercentage(percentageElement);
     
 }
+
+
+/////////////////////////////////////////////////////////////////////////////////////
+
+// make a animated gif clickable // fails
+
+// document.addEventListener("DOMContentLoaded", function () {
+//     document.querySelectorAll(".clickable-gif").forEach((img) => {
+//         let isPaused = false;
+
+//         // Create a SuperGif instance and pass required options
+//         let superGif = new SuperGif(img, { autoPlay: false });
+
+//     });
+// });
+
+
+
+
+// use like this
+// <img class="clickable-gif" src="images/animated.gif" data-src="images/animated.gif" data-paused="false" alt="animated gif">
+// ![](animation.gif){.clickable-gif data-src="animation.gif" data-paused="false"}

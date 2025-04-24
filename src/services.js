@@ -1,6 +1,6 @@
 // Base URL of the backend API, replace with your actual AWS API Gateway or server endpoint
 const BASE_URL = 'https://sebayt.ch/interaktiv/';  // AWS endpoint
-// const BASE_URL = '';  // localhost endpoint
+// const BASE_URL = 'http://localhost/interaktiv/';  // localhost endpoint
 
 export { BASE_URL };
 

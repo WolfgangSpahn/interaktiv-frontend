@@ -214,7 +214,9 @@ let pingCount = 0;
 eventSource.addEventListener('PING', function(event) {
     console.log('Ping received:', event);
     pingCount++;
-    document.getElementById('pingCounter').textContent = `Ping count: ${pingCount}`;
+    // textcontent'/' when pingcount is even and '\' when pingcount is odd
+
+    // document.getElementById('pingshow').textContent = `${pingCount % 2 === 0 ? '/' : '\\'}`;
 });
 
 eventSource.addEventListener('NICKNAME', function(event) {

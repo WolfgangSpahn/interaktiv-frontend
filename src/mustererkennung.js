@@ -577,6 +577,8 @@ export function createMustererkennung(){
                         // Calculate the midpoints
                         midX = (fromX + toX) / 2;
                         midY = (fromY + toY) / 2;
+                        console.log('fromX', fromX, 'fromY', fromY, 'toX', toX, 'toY', toY);
+
                         // -- Y coordinates for the text box and text
                         textY = midY - boxHeight / 2 - fontSize;
                         // draw the line if the layer is visible
@@ -586,12 +588,14 @@ export function createMustererkennung(){
                                 .addClass('clickable');
                         }
                         connectionsGroup.add(line);
+                        
+                        // 
                         // Change network weights on click
                         line.click(function() {
                             //console.log(`Clicked on line from node ${prevNodeIndex} in layer ${layerIndex - 1} to node ${nodeIndex} in layer ${layerIndex}`);
                             const currentWeight = networkData.weights[layerIndex][nodeIndex][prevNodeIndex];
                             const newWeight = cycleValue(currentWeight,tri_values,true);
-                            console.log(`Changing weight from ${currentWeight} to ${newWeight}`);
+                            console.debug(`Changing weight from ${currentWeight} to ${newWeight}`);
                             networkData.weights[layerIndex][nodeIndex][prevNodeIndex] = newWeight;
                             // Update the line color
                             this.stroke(newWeight === 1 ? 'black' : (newWeight === -1 ? 'red' : 'lightgray'));
@@ -601,6 +605,7 @@ export function createMustererkennung(){
                             renderApp(draw, networkData, trainingData, image);
 
                         });
+
 
                     });
                 
@@ -684,6 +689,8 @@ export function createMustererkennung(){
                     this.fill({ color: fillColor });
                     activationText.hide();  // Hide activation text
                 });
+
+
             });
         });
         // draw the output labels right to output layer
@@ -765,6 +772,48 @@ export function createMustererkennung(){
             .font({ family: 'Helvetica', size: 48 })
             .stroke('black');
     }
+
+    function drawLegend(draw) {
+        // Draw the legend for the colors: white: 0, black:1, darkred:-1
+        const legendGroup = draw.group();
+        const legendX = 900;
+        const legendY = 0;
+        const legendWidth = 60;
+        const legendHeight = 100;
+        const legendRect = draw.rect(legendWidth, legendHeight)
+            .move(legendX, legendY)
+            .fill('white')
+            .stroke({ width: 1, color: 'black' });
+        legendGroup.add(legendRect);
+        const legendText = draw.text('Legend')
+            .move(legendX + 5, legendY + 5)
+            .fill('black')
+            .font({ family: 'Helvetica', size: fontSize })
+            .attr({ 'text-anchor': 'left' });
+        legendGroup.add(legendText);
+        const legendItems = [
+            { color: 'black',   label: ':   1' },
+            { color: 'darkred', label: ': -1' },
+            { color: 'white',   label: ':   0' }
+        ];
+        legendItems.forEach((item, index) => {
+            const itemX = legendX + 15;
+            const itemY = legendY + 40 + index * 20;
+            const itemRect = draw.rect(10, 10)
+                .move(itemX, itemY)
+                .fill(item.color)
+                .stroke({ width: 1, color: 'black' });
+            const itemText = draw.text(item.label)
+                .move(itemX + 15, itemY - 18)
+                .fill('black')
+                .font({ family: 'Helvetica', size: fontSize })
+                .attr({ 'text-anchor': 'left' });
+            legendGroup.add(itemRect).add(itemText);
+        });
+    
+
+    }
+
     // Calculate centering offset for each layer based on the maximum layer size
     const maxNodes = Math.max(...networkLayers); // Find the maximum number of nodes in any layer
     const totalHeight = maxNodes * nodeSpacing; // Total height needed to center the largest layer
@@ -774,6 +823,8 @@ export function createMustererkennung(){
         assertDefined(draw, 'SVG draw object is not defined');
         // Clear the existing network
         draw.clear();
+        // Draw legend
+        drawLegend(draw);
         // Draw the connections
         drawConnections(draw, networkData, trainingData, image);
         // Draw the nodes
@@ -782,7 +833,7 @@ export function createMustererkennung(){
         drawMatrix(draw, networkData, trainingData, image, 0, 250);
         // Draw the buttons
         drawVisibilityButtons(draw);
-        drawShowLabelsButton(draw);
+        // drawShowLabelsButton(draw);
         drawWeightUsageButton(draw);
         // Draw the corners
         origin(draw, 0, 0);

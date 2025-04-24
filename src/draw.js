@@ -279,7 +279,7 @@ function createToggleVisibilityButton(target, argConfig) {
 
 export async function resultsBoard(element, argConfig){
     console.log('====> resultsBoard', element, argConfig);
-    const defaults = { width: 1050, height: 550, fieldname: 'answers',hidden: false};
+    const defaults = { width: 1050, height: 850, fieldname: 'answers',hidden: false};
     const config = { ...defaults, ...argConfig };
     // create an svg drawing by placing above icons in a grid using svg.js
     // check if id starts with #, otherwise add #
@@ -359,8 +359,8 @@ export function likertScale(draw, id) {
             // show hand on hover
             .addClass('clickable')
             .addClass('radio-box')
-            // set id
-            .attr({ id: `${id}-${i}` });
+            // set id: needs to be the same than the one in the database
+            .attr({ id: `${id}-${i}` }); 
 
         // Add label below each rectangle
         const textElement = createSVGText(labels[i], x, 45,{ anchor: 'middle', size: 14, color: 'black' });
